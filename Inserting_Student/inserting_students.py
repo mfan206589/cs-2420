@@ -13,6 +13,13 @@ class Student:
 class Bag:
     def __init__(self):
         self.item = []
+    def __iter__(self):
+        return self
+    def delete(self, item):
+        if item in self.item:
+            self.item.remove(item)
+        else:
+            pass
     def insert(self, item):
         if item in self.item:
             return False
@@ -26,6 +33,7 @@ class Bag:
             return False
     def size(self):
         return len(self.item)
+
 def main():
     t1 = time.time()
     bag = Bag()
