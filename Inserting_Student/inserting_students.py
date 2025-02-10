@@ -14,18 +14,20 @@ class Bag:
     def __init__(self):
         self.item = []
     def __iter__(self):
-        return self
+        for item in self.item:
+            yield item
     def delete(self, item):
-        if item in self.item:
-            self.item.remove(item)
-        else:
-            pass
+        for i in item:
+            if i == self.item(i):
+                self.item.pop(i)
     def insert(self, item):
         if item in self.item:
             return False
         else:
             self.item.append(item)
             return True
+    def retrive(self, item):
+        return self.item[item]
     def exist(self, item):
         if item in self.item:
             return True
@@ -38,14 +40,28 @@ def main():
     t1 = time.time()
     bag = Bag()
     with open('FakeNames.txt', 'r') as file:
+        total = 0
+        for item in bag:
+            total += item.age
+        file2 = open('DeleteNames.txt', 'r')
+        for line in file2:
+            SSN = line.strip()
+            s2 = Student("", "", SSN, "", "")
+            bag.delete(s2)
+        file2.close()
+        file3 = open('RetrieveNames.txt', 'r')
+        for line in file3:
+            SSN = line.strip()
+            s2 = Student("", "", SSN, "", "")
+            bag.retrive
         for line in file:
             data = line.strip().split()
             ln, fn, SSN, email, age = data
             student = Student(fn, ln, SSN, email, int(age))
             if not bag.insert(student):
                 print(f'Duplicate Student Found: {fn}, {ln}')
-    file.close()
     t2 = time.time()
     print(f"Total number of unique students. {bag.size()}")
+    print(total)
     print(t2-t1)
 main()
