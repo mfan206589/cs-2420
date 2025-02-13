@@ -142,7 +142,7 @@ def main():
             if count[0] > 0:
                 print(f"{math.log(count[0], 2):>8.2f}", end=" ")
         print()
-    print('Mostly Sorted Data Set Comparision')
+    print('Mostly Sorted Data Set Comparison')
     print('Size: Bubble  Shaker  Counting  Merge  Quick  QuickMod')
     algorithms = [bubble, shaker, counting, merge, quick, quickmodified]
     for s in range(3, 12 + 1):
