@@ -29,20 +29,15 @@ def shaker(set, count):
                     set[i], set[i + 1] = set[i + 1], set[i]
                     changed = True
 def counting(A, count):
-    F = []
-    #or F = [0]*len(A)
-    #Create the frequency list
-    for a in range(len(A)):
-        F.append(0)
+    F = [0] * (max(A) + 1)
     for i in A:
         F[i] += 1
     k = 0
-    for s in range(len(A)):
-       count = F[s]
-       value = s
-       for j in range(count):
-           A[k] = value
-           k += 1
+    for s in range(len(F)):
+        count[0] += F[s]  # Counting comparisons
+        for j in range(F[s]):
+            A[k] = s
+            k += 1
 def merge(A, count):
     if len(A) <= 1:
         return A
@@ -52,12 +47,13 @@ def merge(A, count):
     right = A[mid:]
     #splits the already splited peices
     #recursion
-    left = merge(left)
-    right = merge(right)
+    left = merge(left, count)
+    right = merge(right, count)
     
     i = j = k = 0
     #attempts to sort the lists and re-combines them
     while i < len(left) and j < len(right):
+        count[0] += 1
         if left[i] < right[j]:
             A[k] = left[i]
             i += 1
@@ -77,7 +73,7 @@ def merge(A, count):
 def quick(A, low, high, count):
     F = []
     for i in range(len(A)):
-        count[0]+1
+        count[0] += 1
         F.append(0)
     if high - low <= 0:
         return
@@ -91,8 +87,8 @@ def quick(A, low, high, count):
     piviotindex = lmgt - 1
     A[low] , A[piviotindex] = A[piviotindex] , A[low]
     #recursive step
-    quick(A, low, piviotindex - 1)
-    quick(A, piviotindex + 1, high)
+    quick(A, low, piviotindex - 1, count)
+    quick(A, piviotindex + 1, high, count)
     return A
 def quickmodified(A, low, high, count):
     F = []
@@ -107,14 +103,15 @@ def quickmodified(A, low, high, count):
     piviot = A[mid]
     lmgt = mid + 1
     for i in range(mid + 1, high + 1):
+        count[0] += 1
         if A[i] < piviot:
             A[i] , A[lmgt] = A[lmgt] , A[i]
             lmgt += 1
     piviotindex = lmgt - 1
     A[mid] , A[piviotindex] = A[piviotindex] , A[mid]
     #recursive step
-    quickmodified(A, low, piviotindex - 1)
-    quickmodified(A, piviotindex + 1, high)
+    quickmodified(A, low, piviotindex - 1, count)
+    quickmodified(A, piviotindex + 1, high, count)
     return A
 def CreateRandom(value):
     RandList = []
@@ -122,18 +119,44 @@ def CreateRandom(value):
         #adds numbers to a list
         RandList.append(random.randint(0, value))
     return RandList
+def create_mostly_sorted(size, swap_count=2):
+    sorted_list = list(range(size))
+    for l in range(swap_count):
+        i, j = random.sample(range(size), 2)
+        sorted_list[i], sorted_list[j] = sorted_list[j], sorted_list[i]
+    return sorted_list
 def main():
+    print('Random Data Set Comparison')
+    print('Size: Bubble  Shaker  Counting  Merge  Quick  QuickMod')
     algorithms = [bubble, shaker, counting, merge, quick, quickmodified]
-    for s in range(3, 12+1):
+    for s in range(3, 12 + 1):
         size = 2 ** s
         print(s, end=" ")
         for sort in algorithms:
             A = CreateRandom(size)
-            B = A[:]
             count = [0]
-            sort(A, count)
-            if(A!=B):
-                print('Error!')
-            print(math.log(count[0], 2),end=" ")
+            if sort in [quick, quickmodified]:
+                sort(A, 0, len(A) - 1, count)
+            else:
+                sort(A, count)
+            if count[0] > 0:
+                print(f"{math.log(count[0], 2):>8.2f}", end=" ")
+        print()
+    print('Mostly Sorted Data Set Comparision')
+    print('Size: Bubble  Shaker  Counting  Merge  Quick  QuickMod')
+    algorithms = [bubble, shaker, counting, merge, quick, quickmodified]
+    for s in range(3, 12 + 1):
+        size = 2 ** s
+        swap = 3
+        print(s, end=" ")
+        for sort in algorithms:
+            A = create_mostly_sorted(size, swap)
+            count = [0]
+            if sort in [quick, quickmodified]:
+                sort(A, 0, len(A) - 1, count)
+            else:
+                sort(A, count)
+            if count[0] > 0:
+                print(f"{math.log(count[0], 2):>8.2f}", end=" ")
         print()
 main()
