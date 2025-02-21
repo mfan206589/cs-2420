@@ -7,8 +7,8 @@ def bubble(set, count):
     #defines loop
     while changed:
         #starts loop
-        changed = False 
-        #Begins to read list from left to right     
+        changed = False
+        #Begins to read list from left to right    
         for i in range(0, len(set) - 1):
                 #checks if numbers are bigger if so switches them
                 count[0] += 1
@@ -55,7 +55,7 @@ def merge(A, count):
     #recursion
     left = merge(left, count)
     right = merge(right, count)
-    
+   
     i = j = k = 0
     #attempts to sort the lists and re-combines them
     while i < len(left) and j < len(right):
@@ -74,7 +74,7 @@ def merge(A, count):
     while j < len(right):
         A[k] = right[j]
         j = j + 1
-        k = k + 1 
+        k = k + 1
     return A
 def quick(A, low, high, count):
     count[0] += 1
