@@ -7,8 +7,8 @@ def bubble(set, count):
     #defines loop
     while changed:
         #starts loop
-        changed = False 
-        #Begins to read list from left to right     
+        changed = False
+        #Begins to read list from left to right    
         for i in range(0, len(set) - 1):
                 #checks if numbers are bigger if so switches them
                 count[0] += 1
@@ -20,7 +20,13 @@ def shaker(set, count):
     #checks to see if numbers have switched
     while changed:
         #Starts the while loop
-        changed = False  
+        changed = False
+        for i in range(0, len(set) - 1):
+                #checks if numbers are bigger if so switches them
+                count[0] += 1
+                if set[i] > set[i + 1]:
+                    set[i], set[i + 1] = set[i + 1], set[i]
+                    changed = True  
         #This checks the data from right to left    
         for i in range(len(set) - 2, -1, -1):
                 #checks to see if number is bigger if so switches the two numbers
@@ -49,7 +55,7 @@ def merge(A, count):
     #recursion
     left = merge(left, count)
     right = merge(right, count)
-    
+   
     i = j = k = 0
     #attempts to sort the lists and re-combines them
     while i < len(left) and j < len(right):
@@ -68,19 +74,17 @@ def merge(A, count):
     while j < len(right):
         A[k] = right[j]
         j = j + 1
-        k = k + 1 
+        k = k + 1
     return A
 def quick(A, low, high, count):
-    F = []
-    for i in range(len(A)):
-        count[0] += 1
-        F.append(0)
+    count[0] += 1
     if high - low <= 0:
         return
     #partition
     piviot = A[low]
     lmgt = low + 1
     for i in range(low + 1, high + 1):
+        count[0] += 1
         if A[i] < piviot:
             A[i] , A[lmgt] = A[lmgt] , A[i]
             lmgt += 1
@@ -119,12 +123,11 @@ def CreateRandom(value):
         #adds numbers to a list
         RandList.append(random.randint(0, value))
     return RandList
-def create_mostly_sorted(size, swap_count=2):
-    sorted_list = list(range(size))
-    for l in range(swap_count):
-        i, j = random.sample(range(size), 2)
-        sorted_list[i], sorted_list[j] = sorted_list[j], sorted_list[i]
-    return sorted_list
+def create_mostly_sorted(size):
+    sortedlist = CreateRandom(size)
+    sortedlist.sort()
+    sortedlist[0], sortedlist[-1] = sortedlist[-1], sortedlist[0]
+    return sortedlist
 def main():
     print('Random Data Set Comparison')
     print('Size: Bubble  Shaker  Counting  Merge  Quick  QuickMod')
@@ -147,10 +150,9 @@ def main():
     algorithms = [bubble, shaker, counting, merge, quick, quickmodified]
     for s in range(3, 12 + 1):
         size = 2 ** s
-        swap = 3
         print(s, end=" ")
         for sort in algorithms:
-            A = create_mostly_sorted(size, swap)
+            A = create_mostly_sorted(size)
             count = [0]
             if sort in [quick, quickmodified]:
                 sort(A, 0, len(A) - 1, count)
