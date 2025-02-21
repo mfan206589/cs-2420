@@ -29,8 +29,11 @@ class Bag:
             return False
     def size(self):
         return len(self.people)
-    def delete(self, item):
-        pass
+    def delete(self, ssn):
+        person = self.retrieve(ssn)
+        if person:
+            self.people.remove(person)
+            return True
     def retrieve(self, ssn):
         for person in self.people:
             if person.ssn == ssn:
@@ -44,36 +47,40 @@ def main():
         for line in file:
             data = line.strip().split()
             ln, fn, ssn, email, age = data
-            student = Student(ln, fn, ssn, email, age)
+            student = Student(ln, fn, ssn, email, int(age))
             if not bag.insert(student):
                 print(f"Duplicate Student: {ssn}")
     t2 = time.time()
-    # t3 = time.time()
-    # with open(Retrieve, 'r') as file2:
-    #     retrived = []
-    #     total_age = 0
-    #     total_people = 0
-    #     for line in file2:
-    #         retrieve_ssn = line.strip().split()
-    #         retrived.append(retrieve_ssn)
-    #     for ssn in retrived:
-    #         person = bag.retrieve(ssn)
-    #         if person:
-    #             total_age += student.age
-    #             total_people += 1
-    #         else:
-    #             pass
-    #     average = total_age/total_people
-    # t4 = time.time()
+    t3 = time.time()
+    with open(Retrieve, 'r') as file2:
+        retrieved = []
+        total_age = 0
+        total_people = 0
+        for line in file2:
+            retrieve_ssn = line.strip()
+            retrieved.append(retrieve_ssn)
+        for ssn in retrieved:
+            person = bag.retrieve(ssn)
+            if person:
+                total_age += person.age
+                total_people += 1
+            else:
+                print(f'Unable to Retrieve: {ssn}')
+        average = round(total_age/total_people, 5)
+    t4 = time.time()
     t5 = time.time()
     with open(Delete, 'r') as file3:
         for line in file3:
-            bag.delete(line)
+            person = bag.delete(line.strip())
+            if person:
+                pass
+            else:
+                print(f'Unable to Delete: {line}')
     t6 = time.time()
     print(f'Total Number of Students: {bag.size()}')
-    print(t2-t1)
-    # print(f'Average Age of Retrived Students: {average}')
-    # print(t3-t4)
-    print(f'Time Took to Delete Students: {t5 - t6}')
+    print(f'Time Took to Total: {t2-t1}')
+    print(f'Average Age of Retrived Students: {average}')
+    print(f'Time Took to Average: {t4-t3}')
+    print(f'Time Took to Delete Students: {t6 - t5}')
 
 main()
