@@ -1,7 +1,7 @@
 import time
 from pathlib import Path
 root_dir = Path(__file__).parent
-Fake = root_dir / 'FakeNamesT.txt'
+Fake = root_dir / 'FakeNames.txt'
 Retrieve = root_dir / 'RetrieveNames.txt'
 Delete = root_dir / 'DeleteNames.txt'
 class Student:
@@ -40,24 +40,26 @@ class Bag:
             size += 1
             current = current.nxt
         return size
-    def Retrieve(self, item):
+    def Retrieve(self, ssn):
         current = self.first
         while current:
-            if current.item == item:
+            if current.item.ssn == ssn:
                 return current.item
             current = current.nxt
         return None
-    def Delete(self, item):
-        if not self.Exists(item):
-            return False
-        if self.first.item == item:
-            self.first = self.first.nxt
-            return True
+    def Delete(self, ssn):
         current = self.first
-        while current.nxt.item != item:
+        previous = None
+        while current:
+            if current.item.ssn == ssn:  # Compare the SSN directly
+                if previous is None:  # Deleting the first node
+                    self.first = current.nxt
+                else:  # Deleting a node in the middle or end
+                    previous.nxt = current.nxt
+                return current.item  # Return the deleted Student object
+            previous = current
             current = current.nxt
-        current.nxt = current.nxt.nxt
-        return True
+        return None
     def __iter__(self):
         current = self.first
         while current:
