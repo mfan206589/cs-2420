@@ -27,76 +27,94 @@ class Node:
 class Bag:
     def __init__(self):
         self.root = None
+
     def Insert(self, item):
-        if self.Exists(item):
+        if self.Exists(item.ssn):
             return False
         self.root = self.InsertR(item, self.root)
         return True
+
     def InsertR(self, item, current):
         if current is None:
             current = Node(item)
-        elif item < current.item.ssn:
+        elif item.ssn < current.item.ssn:
             current.L = self.InsertR(item, current.L)
         else:
             current.R = self.InsertR(item, current.R)
         return current
-    def Retrive(self, item):
-        return self.RetriveR(item, self.root)
-    def RetriveR(self, item, current):
+
+    def Retrieve(self, ssn):
+        return self.RetrieveR(ssn, self.root)
+
+    def RetrieveR(self, ssn, current):
         if current is None:
             return None
-        if item == current.item.ssn:
+        if ssn == current.item.ssn:  
             return current.item
-        elif item < current.item.ssn:
-            return self.RetriveR(item, current.L)
+        elif ssn < current.item.ssn:
+            return self.RetrieveR(ssn, current.L)
         else:
-            return self.RetriveR(item, current.R)
-    def Delete(self, item):
-        if not self.Exists(item):
-            return False
-        self.root = self.DeleteR(item, self.root)
-        return True
-    def DeleteR(self, item, current):
-        if item < current.item.ssn:
-            current.L = self.DeleteR(item, current.L)
-        elif item > current.item.ssn:
-            current.R =  self.DeleteR(item, current.R)
+            return self.RetrieveR(ssn, current.R)
+
+    def Delete(self, ssn):
+        if not self.Exists(ssn):
+            return None
+        self.root, deleted_item = self.DeleteR(ssn, self.root)
+        return deleted_item
+
+    def DeleteR(self, ssn, current):
+        if current is None:
+            return current, None
+        if ssn < current.item.ssn:
+            current.L, deleted_item = self.DeleteR(ssn, current.L)
+        elif ssn > current.item.ssn:
+            current.R, deleted_item = self.DeleteR(ssn, current.R)
         else:
-            if current.L is None and current.R is None:
+           
+            deleted_item = current.item
+            if current.L is None and current.R is None:  
                 current = None
-            elif current.R:
-                current = current.R 
-            elif current.L:
+            elif current.R:  
+                current = current.R
+            elif current.L: 
                 current = current.L
-            else:
-                succsessor = current.R
-                while succsessor.L:
-                    succsessor = succsessor.L
-                current.item.ssn = succsessor.item.ssn
-                current.R = self.DeleteR(succsessor.item.ssn, current.R)
-        return current
-    def Exists(self, item):
-        return self.ExistsR(item, self.root)
-    def ExistsR(self, item, current):
+            else:  
+                successor = current.R
+                while successor.L:
+                    successor = successor.L
+                current.item = successor.item 
+                current.R, _ = self.DeleteR(successor.item.ssn, current.R) 
+        return current, deleted_item
+
+    def Exists(self, ssn):
+        return self.ExistsR(ssn, self.root)
+
+    def ExistsR(self, ssn, current):
         if current is None:
             return False
-        if item == current.item.ssn:
+        if ssn == current.item.ssn: 
             return True
-        elif item < current.item.ssn:
-            return self.ExistsR(item, current.L)
+        elif ssn < current.item.ssn:
+            return self.ExistsR(ssn, current.L)
         else:
-            return self.ExistsR(item, current.R)
+            return self.ExistsR(ssn, current.R)
+
     def Size(self):
         return self.SizeR(self.root)
+
     def SizeR(self, current):
-        return 1 + self.SizeR(current.L)
+        if current is None:
+            return 0
+        return 1 + self.SizeR(current.L) + self.SizeR(current.R)
+
     def __iter__(self):
         yield from self.IterR(self.root)
+
     def IterR(self, current):
         if current is not None:
-            yield from self.IterR(current.left)
+            yield from self.IterR(current.L)
             yield current.item
-            yield from self.IterR(current.right)
+            yield from self.IterR(current.R)
 
 # Main function to execute the program
 def main():
@@ -124,7 +142,7 @@ def main():
             retrieve_ssn = line.strip()
             retrieved.append(retrieve_ssn)
         for ssn in retrieved:
-            person = bag.Retrive(ssn)
+            person = bag.Retrieve(ssn)
             if person:
                 total_age += person.age
                 total_people += 1
