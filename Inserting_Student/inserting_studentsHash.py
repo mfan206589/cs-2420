@@ -3,9 +3,9 @@ from pathlib import Path
 
 # Define file paths
 root_dir = Path(__file__).parent
-Fake = root_dir / 'FakeNamesM.txt'
-Retrieve = root_dir / 'RetrieveNamesM.txt'
-Delete = root_dir / 'DeleteNamesM.txt'
+Fake = root_dir / 'FakeNames.txt'
+Retrieve = root_dir / 'RetrieveNames.txt'
+Delete = root_dir / 'DeleteNames.txt'
 
 # Define the Student class
 class Student:
@@ -127,7 +127,12 @@ def IsPrime(number):
 # Main function to execute the program
 def main():
     t1 = time.time()  # Start timing
-    bag = Bag(100000)  # Create a new Bag instance
+
+    with open(Fake, 'r') as file:
+        file_size = 0
+        for line in file:
+            file_size += 1
+    bag = Bag(file_size)  # Create a new Bag instance
     TotalFails = 0
     # Insert students from FakeNames.txt
     with open(Fake, 'r') as file:
