@@ -3,9 +3,9 @@ from pathlib import Path
 
 # Define file paths
 root_dir = Path(__file__).parent
-Fake = root_dir / 'FakeNames.txt'
-Retrieve = root_dir / 'RetrieveNames.txt'
-Delete = root_dir / 'DeleteNames.txt'
+Fake = root_dir / 'FakeNamesM.txt'
+Retrieve = root_dir / 'RetrieveNamesM.txt'
+Delete = root_dir / 'DeleteNamesM.txt'
 
 # Define the Student class
 class Student:
@@ -128,7 +128,7 @@ def IsPrime(number):
 def main():
     t1 = time.time()  # Start timing
     bag = Bag(100000)  # Create a new Bag instance
-
+    TotalFails = 0
     # Insert students from FakeNames.txt
     with open(Fake, 'r') as file:
         for line in file:
@@ -136,7 +136,7 @@ def main():
             ln, fn, ssn, email, age = data
             student = Student(ln, fn, ssn, email, int(age))  # Create a Student object
             if not bag.insert(student):
-                print(f"Duplicate Student: {ssn}")
+                TotalFails += 1  # Increment the failure count if insertion fails
 
     t2 = time.time()  # Time after inserting students
     t3 = time.time()  # Start timing for retrieval
@@ -155,7 +155,7 @@ def main():
                 total_age += person.age  # Add the age to the total
                 total_people += 1  # Increment the count of retrieved people
             else:
-                print(f'Unable to Retrieve: {ssn}')
+                TotalFails += 1
         average = round(total_age / total_people, 5)  # Calculate average age
 
     t4 = time.time()  # Time after retrieval
@@ -168,11 +168,12 @@ def main():
             if person:
                 pass
             else:
-                print(f'Unable to Delete: {line}')
+                TotalFails += 1
 
     t6 = time.time()  # Time after deletion
 
     # Print results
+    print(f'Total Number of Fails: {TotalFails}')  # Print the total number of failures
     print(f'Total Number of Students: {bag.size()}')  # Print the number of remaining students
     print(f'Time Took to Total: {t2 - t1}')  # Print the time taken for insertion
     print(f'Average Age of Retrieved Students: {average}')  # Print the average age
