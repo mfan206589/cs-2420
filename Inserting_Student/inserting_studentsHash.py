@@ -3,9 +3,9 @@ from pathlib import Path
 
 # Define file paths
 root_dir = Path(__file__).parent
-Fake = root_dir / 'FakeNamesB.txt'
-Retrieve = root_dir / 'RetrieveNamesB.txt'
-Delete = root_dir / 'DeleteNamesB.txt'
+Fake = root_dir / 'FakeNamesM.txt'
+Retrieve = root_dir / 'RetrieveNamesM.txt'
+Delete = root_dir / 'DeleteNamesM.txt'
 
 # Define the Student class
 class Student:
@@ -66,7 +66,7 @@ class Bag:
 
     def size(self):
         # Return the number of non-None items in the hash table
-        return len([item for item in self.Table if item is not None])
+        return len([count for count in self.Table if count is not None])
 
     def delete(self, ssn):
         # Delete a Student object from the hash table based on their SSN
@@ -112,7 +112,7 @@ class Bag:
 
     def __iter__(self):
         # Allow iteration over non-None items in the hash table
-        return (item for item in self.Table if item is not None)
+        return (slot for slot in self.Table if slot is not None)
 
 def IsPrime(number):
     # Check if a number is prime
