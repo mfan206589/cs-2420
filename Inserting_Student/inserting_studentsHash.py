@@ -3,9 +3,9 @@ from pathlib import Path
 
 # Define file paths
 root_dir = Path(__file__).parent
-Fake = root_dir / 'FakeNames.txt'
-Retrieve = root_dir / 'RetrieveNames.txt'
-Delete = root_dir / 'DeleteNames.txt'
+Fake = root_dir / 'FakeNamesB.txt'
+Retrieve = root_dir / 'RetrieveNamesB.txt'
+Delete = root_dir / 'DeleteNamesB.txt'
 
 # Define the Student class
 class Student:
