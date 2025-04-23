@@ -150,7 +150,7 @@ def main():
             student = Student(ln, fn, ssn, email, int(age))  # Create a Student object
             if not bag.Insert(student):  # Insert the student into the tree
                 TotalFails += 1  # Increment the failure count if insertion fails
-
+    
     t2 = time.time()  # Time after inserting students
     t3 = time.time()  # Start timing for retrieval
 

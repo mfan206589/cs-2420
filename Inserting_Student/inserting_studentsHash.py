@@ -66,7 +66,7 @@ class Bag:
 
     def size(self):
         # Return the number of non-None items in the hash table
-        return len([count for count in self.Table if count is not None])
+        return len([count for count in self.Table if count is not None and count is not False])
 
     def delete(self, ssn):
         # Delete a Student object from the hash table based on their SSN
@@ -142,7 +142,11 @@ def main():
             student = Student(ln, fn, ssn, email, int(age))  # Create a Student object
             if not bag.insert(student):
                 TotalFails += 1  # Increment the failure count if insertion fails
-
+    #traverse
+    age_total = 0
+    for item in bag:
+        age_total += int(item.age)
+    print('Average of all is', age_total/bag.size())
     t2 = time.time()  # Time after inserting students
     t3 = time.time()  # Start timing for retrieval
 
